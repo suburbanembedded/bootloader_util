@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 
-#include "common_util/Optional_val.hpp"
-
 class IHEX_RECORD
 {
 public:
