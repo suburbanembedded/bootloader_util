@@ -10,4 +10,5 @@ target_include_directories(bootloader_util PUBLIC
 
 target_link_libraries(bootloader_util
 	common_util
+	crc
 )
