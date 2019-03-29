@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+constexpr std::array<uint8_t, 8> Bootloader_key::MAGIC_SIG_DEF;
+
 void Bootloader_key::to_addr(uint8_t* const addr)
 {
 	volatile uint8_t* ptr = addr;
