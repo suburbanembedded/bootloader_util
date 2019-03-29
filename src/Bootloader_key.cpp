@@ -1,5 +1,7 @@
 #include "bootloader_util/Bootloader_key.hpp"
 
+#include "crc/crc_32c.hpp"
+
 #include <algorithm>
 
 void Bootloader_key::to_addr(uint8_t* const addr)

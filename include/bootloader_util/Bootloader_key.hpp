@@ -1,8 +1,5 @@
 #pragma once
 
-#include "crc/crc_32c.hpp"
-
-#include <algorithm>
 #include <array>
 
 #include <cstdint>
