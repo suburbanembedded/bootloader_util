@@ -13,6 +13,11 @@ public:
 		RUN_APP
 	};
 
+	Bootloader_key(const Bootloader_ops op);
+
+	static Bootloader_key get_key_boot();
+	static Bootloader_key get_key_app();
+
 	void to_addr(uint8_t* const addr);
 	void from_addr(const uint8_t* addr);
 

@@ -6,6 +6,22 @@
 
 constexpr std::array<uint8_t, 8> Bootloader_key::MAGIC_SIG_DEF;
 
+Bootloader_key::Bootloader_key(const Bootloader_ops op)
+{
+	update_magic_sig();
+	bootloader_op = static_cast<uint8_t>(op);
+	update_crc();
+}
+
+Bootloader_key Bootloader_key::get_key_boot()
+{
+	return Bootloader_key(Bootloader_key::Bootloader_ops::RUN_BOOTLDR);
+}
+Bootloader_key Bootloader_key::get_key_app()
+{
+	return Bootloader_key(Bootloader_key::Bootloader_ops::RUN_APP);
+}
+
 void Bootloader_key::to_addr(uint8_t* const addr)
 {
 	volatile uint8_t* ptr = addr;
