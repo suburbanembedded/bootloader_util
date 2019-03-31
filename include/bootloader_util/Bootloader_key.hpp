@@ -25,7 +25,7 @@ public:
 	static Bootloader_key get_key_boot();
 	static Bootloader_key get_key_app();
 
-	void to_addr(uint8_t* const addr);
+	void to_addr(uint8_t* const addr) const;
 	void from_addr(const uint8_t* addr);
 
 	uint32_t calculate_crc() const;
