@@ -13,6 +13,13 @@ public:
 		RUN_APP
 	};
 
+	Bootloader_key()
+	{
+		magic_sig.fill(0);
+		bootloader_op = 0;
+		crc32 = 0;
+	}
+
 	Bootloader_key(const Bootloader_ops op);
 
 	static Bootloader_key get_key_boot();
