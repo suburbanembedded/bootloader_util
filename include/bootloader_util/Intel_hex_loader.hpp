@@ -1,3 +1,10 @@
+/**
+ * @brief Intel_hex_loader
+ * @author Jacob Schloss <jacob@schloss.io>
+ * @copyright Copyright (c) 2018 Jacob Schloss. All rights reserved.
+ * @license Licensed under the 3-Clause BSD license. See LICENSE for details
+*/
+
 #pragma once
 
 #include <cstdint>
@@ -14,7 +21,7 @@ public:
 		REC_EXTENDED_SEGMENT_ADDRESS	= 0x02,//16 addr bits, add to addr bits from data field
 		REC_START_SEGMENT_ADDRESS		= 0x03,//CS:IP reg, 16 bit start address
 		REC_EXTENDED_LINEAR_ADDRESS		= 0x04,//16 high addr bits, get low addr bits from data field
-		REC_START_LINEAR_ADDRESS		= 0x05//32 bit abs address to jump to
+		REC_START_LINEAR_ADDRESS		= 0x05 //32 bit abs address to jump to
 	};
 
 	uint8_t byte_count;
