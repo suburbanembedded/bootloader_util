@@ -1,6 +1,6 @@
 ## Copyright
 
-Copyright (c) 2018 Jacob Schloss
+Copyright (c) 2019 Jacob Schloss
 
 ## License
 

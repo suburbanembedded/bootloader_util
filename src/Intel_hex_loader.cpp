@@ -1,3 +1,10 @@
+/**
+ * @brief Intel_hex_loader
+ * @author Jacob Schloss <jacob@schloss.io>
+ * @copyright Copyright (c) 2019 Jacob Schloss. All rights reserved.
+ * @license Licensed under the 3-Clause BSD license. See LICENSE for details
+*/
+
 #include "bootloader_util/Intel_hex_loader.hpp"
 
 #include "common_util/Byte_util.hpp"
