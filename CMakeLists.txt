@@ -1,7 +1,18 @@
 
+add_library(bootloader_key
+	src/Bootloader_key.cpp
+)
+
+target_include_directories(bootloader_key PUBLIC
+	include/
+)
+
+target_link_libraries(bootloader_key
+	crc
+)
+
 add_library(bootloader_util
 	src/Intel_hex_loader.cpp
-	src/Bootloader_key.cpp
 )
 
 target_include_directories(bootloader_util PUBLIC
@@ -9,6 +20,7 @@ target_include_directories(bootloader_util PUBLIC
 )
 
 target_link_libraries(bootloader_util
+	bootloader_key
 	common_util
 	crc
 )
