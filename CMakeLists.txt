@@ -24,3 +24,10 @@ target_link_libraries(bootloader_util
 	common_util
 	crc
 )
+
+if(DEFINED Doxygen::doxygen)
+	doxygen_add_docs(bootloader_util_docs
+		include/
+		src/
+	)
+endif()
