@@ -38,6 +38,7 @@ public:
 
 	bool to_string(std::string* const str);
 	bool from_string(const std::string& str);
+	bool from_string(const char* str, const size_t len);
 };
 
 class Intel_hex_loader
@@ -54,6 +55,7 @@ public:
 	}
 
 	bool process_line(const std::string& line);
+	bool process_line(const char* line, const size_t len);
 
 	bool has_eof() const
 	{

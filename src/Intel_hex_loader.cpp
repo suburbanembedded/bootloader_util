@@ -77,7 +77,11 @@ bool IHEX_RECORD::to_string(std::string* const str)
 }
 bool IHEX_RECORD::from_string(const std::string& str)
 {
-	const char* ptr = str.data();
+	return from_string(str.data(), str.size());
+}
+bool IHEX_RECORD::from_string(const char* str, const size_t len)
+{
+	const char* ptr = str;
 
 	if(ptr[0] != ':')
 	{
@@ -89,7 +93,7 @@ bool IHEX_RECORD::from_string(const std::string& str)
 		return false;
 	}
 
-	if(str.size() < (1U+2U+4U+2U+byte_count*2U+2U))
+	if(len < (1U+2U+4U+2U+byte_count*2U+2U))
 	{
 		return false;
 	}
@@ -125,7 +129,7 @@ bool IHEX_RECORD::from_string(const std::string& str)
 	return true;
 }
 
-bool Intel_hex_loader::process_line(const std::string& line)
+bool Intel_hex_loader::process_line(const char* line, const size_t len)
 {
 	IHEX_RECORD rec;
 
@@ -180,6 +184,11 @@ bool Intel_hex_loader::process_line(const std::string& line)
 	}
 
 	return ret;
+}
+
+bool Intel_hex_loader::process_line(const std::string& line)
+{
+	return process_line(line.data(), line.size());
 }
 
 bool Intel_hex_loader::handle_DATA(const IHEX_RECORD& rec)
