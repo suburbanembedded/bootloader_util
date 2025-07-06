@@ -25,12 +25,13 @@ public:
 	{
 		magic_sig.fill(0);
 		app_md5.fill(0);
+		app_length = 0;
 		bootloader_op = 0;
 		crc32 = 0;
 	}
 
 	Bootloader_key(const Bootloader_ops op);
-	Bootloader_key(const Bootloader_ops op, const std::array<uint8_t, 16>& md5);
+	Bootloader_key(const Bootloader_ops op, const std::array<uint8_t, 16>& md5, const uint32_t length);
 
 	static Bootloader_key get_key_boot();
 	static Bootloader_key get_key_app();
@@ -48,6 +49,9 @@ public:
 
 	std::array<uint8_t, 8> magic_sig;
 	std::array<uint8_t, 16> app_md5;
+	uint32_t app_length;
 	uint32_t bootloader_op;
 	uint32_t crc32;
+
+	static constexpr uint32_t LENGTH_IN_BYTES = 8+16+4+4+4;
 };

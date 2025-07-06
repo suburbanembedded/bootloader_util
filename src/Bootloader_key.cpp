@@ -17,14 +17,16 @@ Bootloader_key::Bootloader_key(const Bootloader_ops op)
 {
 	update_magic_sig();
 	app_md5.fill(0);
+	app_length = 0;
 	bootloader_op = static_cast<uint8_t>(op);
 	update_crc();
 }
 
-Bootloader_key::Bootloader_key(const Bootloader_ops op, const std::array<uint8_t, 16>& md5)
+Bootloader_key::Bootloader_key(const Bootloader_ops op, const std::array<uint8_t, 16>& md5, const uint32_t length)
 {
 	update_magic_sig();
 	app_md5 = md5;
+	app_length = length;
 	bootloader_op = static_cast<uint8_t>(op);
 	update_crc();
 }
@@ -48,6 +50,9 @@ void Bootloader_key::to_addr(uint8_t volatile * const addr) const
 	std::copy_n(app_md5.data(), app_md5.size(), ptr);
 	ptr += app_md5.size();
 
+	std::copy_n((uint8_t*)&app_length, sizeof(app_length), ptr);
+	ptr += sizeof(app_length);
+
 	std::copy_n((uint8_t*)&bootloader_op, sizeof(bootloader_op), ptr);
 	ptr += sizeof(bootloader_op);
 
@@ -65,6 +70,9 @@ void Bootloader_key::from_addr(uint8_t volatile const * const addr)
 
 	std::copy_n(ptr, app_md5.size(), app_md5.data());
 	ptr += app_md5.size();
+
+	std::copy_n(ptr, sizeof(app_length), (uint8_t*)&app_length);
+	ptr += sizeof(app_length);
 
 	std::copy_n(ptr, sizeof(bootloader_op), (uint8_t*)&bootloader_op);
 	ptr += sizeof(bootloader_op);
