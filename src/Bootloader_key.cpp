@@ -38,10 +38,10 @@ void Bootloader_key::to_addr(uint8_t volatile * const addr) const
 	std::copy_n(&bootloader_op, 1, ptr);
 	ptr += 1;
 
-	std::copy_n(reinterpret_cast<uint8_t volatile const *>(&crc32), sizeof(crc32), ptr);
+	std::copy_n(reinterpret_cast<uint8_t const *>(&crc32), sizeof(crc32), ptr);
 	ptr += sizeof(crc32);
 }
-void Bootloader_key::from_addr(const uint8_t* addr)
+void Bootloader_key::from_addr(uint8_t volatile const * const addr)
 {
 	uint8_t volatile const * ptr = addr;
 	std::copy_n(ptr, magic_sig.size(), magic_sig.data());
