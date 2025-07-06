@@ -16,8 +16,9 @@ class Bootloader_key
 public:
 	enum class Bootloader_ops : uint8_t
 	{
-		RUN_BOOTLDR,
-		RUN_APP
+		RUN_BOOTLDR, // Stay in bootloader mode
+		LOAD_APP,    // Load app into AXI sram, set op to RUN_APP and reset
+		RUN_APP      // Run app
 	};
 
 	Bootloader_key()
