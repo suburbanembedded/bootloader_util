@@ -10,6 +10,7 @@
 #include "crc/crc_32c.hpp"
 
 #include <algorithm>
+#include <cstring>
 
 constexpr std::array<uint8_t, 8> Bootloader_key::MAGIC_SIG_DEF;
 
@@ -42,43 +43,45 @@ Bootloader_key Bootloader_key::get_key_app()
 
 void Bootloader_key::to_addr(uint8_t volatile * const addr) const
 {
-	uint8_t volatile * ptr = addr;
+	uint32_t volatile * ptr = reinterpret_cast<uint32_t volatile *>(addr);
 
-	std::copy_n(magic_sig.data(), magic_sig.size(), ptr);
-	ptr += magic_sig.size();
+	uint32_t tmp;
+	for(size_t i = 0; i < 8/4; i++)
+	{
+		memcpy(&tmp, magic_sig.data()+i*4, 4);
+		ptr[i] = tmp;
+	}
 
-	std::copy_n(app_md5.data(), app_md5.size(), ptr);
-	ptr += app_md5.size();
+	for(size_t i = 0; i < 16/4; i++)
+	{
+		memcpy(&tmp, app_md5.data()+i*4, 4);
+		ptr[2+i] = tmp;
+	}
 
-	std::copy_n((uint8_t*)&app_length, sizeof(app_length), ptr);
-	ptr += sizeof(app_length);
-
-	std::copy_n((uint8_t*)&bootloader_op, sizeof(bootloader_op), ptr);
-	ptr += sizeof(bootloader_op);
-
-	std::copy_n((uint8_t*)&crc32, sizeof(crc32), ptr);
-	ptr += sizeof(crc32);
-
-	*ptr = bootloader_op;
+	ptr[6] = app_length;
+	ptr[7] = bootloader_op;
+	ptr[8] = crc32;
 }
 void Bootloader_key::from_addr(uint8_t volatile const * const addr)
 {
-	uint8_t volatile const * ptr = addr;
+	uint32_t volatile const * ptr = reinterpret_cast<uint32_t volatile const *>(addr);
 
-	std::copy_n(ptr, magic_sig.size(), magic_sig.data());
-	ptr += magic_sig.size();
+	uint32_t tmp;
+	for(size_t i = 0; i < 8/4; i++)
+	{
+		tmp = ptr[i];
+		memcpy(magic_sig.data()+i*4, &tmp, 4);
+	}
 
-	std::copy_n(ptr, app_md5.size(), app_md5.data());
-	ptr += app_md5.size();
+	for(size_t i = 0; i < 16/4; i++)
+	{
+		tmp = ptr[2+i];
+		memcpy(app_md5.data()+i*4, &tmp, 4);
+	}
 
-	std::copy_n(ptr, sizeof(app_length), (uint8_t*)&app_length);
-	ptr += sizeof(app_length);
-
-	std::copy_n(ptr, sizeof(bootloader_op), (uint8_t*)&bootloader_op);
-	ptr += sizeof(bootloader_op);
-
-	std::copy_n(ptr, sizeof(crc32), (uint8_t*)&crc32);
-	ptr += sizeof(crc32);
+	app_length    = ptr[6];
+	bootloader_op = ptr[7];
+	crc32         = ptr[8];
 }
 
 uint32_t Bootloader_key::calculate_crc() const
@@ -86,8 +89,9 @@ uint32_t Bootloader_key::calculate_crc() const
 	crc_32c::crc_t crc = crc_32c::crc_init();
 
 	crc = crc_32c::crc_update(crc, magic_sig.data(), magic_sig.size());
-	crc = crc_32c::crc_update(crc, app_md5.data(), app_md5.size());
-	crc = crc_32c::crc_update(crc, &bootloader_op, sizeof(bootloader_op));
+	crc = crc_32c::crc_update(crc, app_md5.data(),   app_md5.size());
+	crc = crc_32c::crc_update(crc, &app_length,      sizeof(app_length));
+	crc = crc_32c::crc_update(crc, &bootloader_op,   sizeof(bootloader_op));
 
 	crc = crc_32c::crc_finalize(crc);
 
